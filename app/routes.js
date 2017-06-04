@@ -1,11 +1,12 @@
 var User = require('./models/user');
 module.exports = function(app, passport){
 	app.get('/', function(req, res){
-		res.render('index.ejs');
+		res.render('index.hbs');
 	});
 
 	app.get('/login', function(req, res){
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+		var message = req.flash('loginMessage');
+		res.render('login.hbs', { message: message , hasErrors : message.length > 0});
 	});
 	app.post('/login', passport.authenticate('local-login', {
 		successRedirect: '/profile',
@@ -14,7 +15,8 @@ module.exports = function(app, passport){
 	}));
 
 	app.get('/signup', function(req, res){
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
+		var message = req.flash('signupMessage');
+		res.render('signup.hbs', { message: message ,hasErrors : message.length > 0});
 	});
 
 
@@ -25,7 +27,7 @@ module.exports = function(app, passport){
 	}));
 
 	app.get('/profile', isLoggedIn, function(req, res){
-		res.render('profile.ejs', { user: req.user });
+		res.render('profile.hbs', { user: req.user });
 	});
 
 	app.get('/auth/facebook', passport.authenticate('facebook', {scope: ['email']}));
